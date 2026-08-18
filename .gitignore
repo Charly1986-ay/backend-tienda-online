@@ -1,0 +1,49 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# -----------------------------
+# Configuración de entorno
+# -----------------------------
+.venv
+
+# -----------------------------
+# Bases de datos locales
+# -----------------------------
+*.sqlite
+*.db
+*.db-journal
+
+# -----------------------------
+# Archivos de medios / uploads
+# -----------------------------
+app/uploads/
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+
+# -----------------------------
+# IDE / editores
+# -----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# -----------------------------
+# Sistemas operativos
+# -----------------------------
+.DS_Store
+Thumbs.db

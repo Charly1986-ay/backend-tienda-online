@@ -1,0 +1,17 @@
+BRANDS = [
+    {'name': 'Generica', 'slug': 'generica'},
+    {'name': 'Caterpillar', 'slug': 'caterpillar'},
+    {'name': 'DeWalt', 'slug': 'dewalt'},
+    {'name': 'Noblex', 'slug': 'noblex'},
+    {'name': 'Samsung', 'slug': 'samsung'},
+    {'name': 'Arcoriris', 'slug': 'arcoriris'},
+    {'name': 'Jvc', 'slug': 'jvc'},
+    {'name': 'AMD', 'slug': 'amd'},
+    {'name': 'Intel', 'slug': 'intel'},
+    {'name': 'Panasonic', 'slug': 'panasonic'},
+    {'name': 'Lenovo', 'slug': 'lenovo'},
+    {'name': 'Hewlett Packard', 'slug': 'hewlett-packard'},
+    {'name': 'Acer', 'slug': 'acer'},
+    {'name': 'LG', 'slug': 'lg'},
+    {'name': 'Gigabyte', 'slug': 'gigabyte'},
+]
