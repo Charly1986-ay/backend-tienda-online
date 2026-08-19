@@ -84,8 +84,7 @@ class ArticleService:
         async with self._transaction():
             article_db = Article(
                 detail=article.detail,
-                stock=article.stock,
-                stock_min=article.stock_min,
+                stock=article.stock,                
                 cost=article.cost,
                 price=article.price,
                 brand_id=article.brand_id,

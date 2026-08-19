@@ -19,8 +19,7 @@ class ArticleValidatedBase(BaseModel):
 
 class ArticleCreate(BaseModel):
     detail: str
-    stock: int = 0
-    stock_min: int = 1
+    stock: int = 0    
     cost: Decimal = Decimal("0.00")
     price: Decimal = Decimal("0.00")
     brand_id: int = 1
@@ -33,8 +32,7 @@ class ArticleCreate(BaseModel):
     def as_form(
         cls,
         detail: str = Form(...),
-        stock: int = Form(0),
-        stock_min: int = Form(1),
+        stock: int = Form(0),        
         cost: Decimal = Form(Decimal("0.00")),
         price: Decimal = Form(Decimal("0.00")),
         brand_id: int = Form(1),
@@ -44,8 +42,7 @@ class ArticleCreate(BaseModel):
     ):
         return cls(
             detail=detail,
-            stock=stock,
-            stock_min=stock_min,
+            stock=stock,            
             cost=cost,
             price=price,
             brand_id=brand_id,
@@ -58,7 +55,6 @@ class ArticleCreate(BaseModel):
 
 class ArticleUpdate(ArticleValidatedBase):    
     detail: Optional[str] = None    
-    stock_min: Optional[int] = None    
     units_type: Optional[UnitsType] = None    
     image_url: Optional[str] = None
 
@@ -87,8 +83,7 @@ class UpdateStatus(BaseModel):
 class ArticleResponse(BaseModel):
     id: int    
     detail: str    
-    stock: int
-    stock_min: int
+    stock: int    
     cost: Decimal
     price: Decimal
     brand_id: int
@@ -96,13 +91,11 @@ class ArticleResponse(BaseModel):
     units_type: UnitsType
     status: StatusArticle
     image_url: Optional[str] = None
+    category_name: Optional[str] = None
+    brand_name: Optional[str] = None
     
     model_config = ConfigDict(from_attributes=True)
 
-
-class ArticleWithRelationsResponse(ArticleResponse):
-    category_name: Optional[str] = None
-    brand_name: Optional[str] = None
 
 
 class ArticlePaginationResponse(BaseModel):  
@@ -111,6 +104,6 @@ class ArticlePaginationResponse(BaseModel):
     offset: int
     page: int
     page_size: int
-    articles: List[ArticleWithRelationsResponse]  
+    articles: List[ArticleResponse]  
 
     model_config = ConfigDict(from_attributes=True)

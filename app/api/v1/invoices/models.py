@@ -30,3 +30,8 @@ class Invoice(SQLModel, table=True):
     items: List["InvoiceItem"] = Relationship(back_populates="invoice")
     # Relación con el modelo User (el cliente)
     client: Optional["User"] = Relationship(back_populates="invoices")
+
+    @property
+    def fullname(self) -> Optional[str]:
+        """Calcula el full_name a partir de la relación User"""
+        return self.client.full_name if self.client else None

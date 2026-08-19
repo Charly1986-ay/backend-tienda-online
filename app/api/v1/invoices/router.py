@@ -1,14 +1,15 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
 
 from app.api.v1.invoices.service import InvoiceService
+from app.core.exceptions import InvoiceNotFound
 
 from .enums import InvoiceSortField, InvoiceStatus
-from .schemas import InvoicePaginationResponse
+from .schemas import InvoicePaginationResponse, InvoiceResponse
 from app.core.db import get_session
 
-from typing import Literal, Optional
+from typing import List, Literal, Optional
 
 
 router = APIRouter()
@@ -33,7 +34,7 @@ async def get_all(
         default='asc', 
         description='Dirección del ordenamiento: asc o desc'
     ),
-        db: AsyncSession = Depends(get_session)
+    db: AsyncSession = Depends(get_session)
 ) -> InvoicePaginationResponse:
     invoice_service = InvoiceService(db=db)
 
@@ -47,3 +48,47 @@ async def get_all(
         sort_order=sort_order
     )
     return pagination
+
+
+@router.get(
+    '/{invoice_id}', 
+    response_model=InvoiceResponse,
+    status_code=status.HTTP_200_OK
+)
+async def get_invoice(
+    invoice_id: int = Path(
+        ..., 
+        ge=1,
+        description='Identificador entero de la factura, debe ser mayor o igual a 1',
+        examples=[1]
+    ),
+    db: AsyncSession = Depends(get_session)
+) -> InvoiceResponse:
+    invoice_service = InvoiceService(db=db)
+
+    try:       
+        return await invoice_service.get_invoice(invoice_id=invoice_id)
+    except InvoiceNotFound:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Invoice not found"
+        )
+
+
+@router.get(
+    '/{invoice_id}/items', 
+    response_model=List[InvoiceResponse],
+    status_code=status.HTTP_200_OK
+)
+async def get_items(
+    invoice_id: int = Path(
+        ..., 
+        ge=1,
+        description='Identificador entero de la factura, debe ser mayor o igual a 1',
+        examples=[1]
+    ),
+    db: AsyncSession = Depends(get_session)
+) -> InvoiceResponse:
+    invoice_service = InvoiceService(db=db)
+
+    return invoice_service.get_items(invoice_id=invoice_id)

@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, computed_field
 
 from app.api.v1.invoice_items.schemas import InvoiceItemCreate
@@ -31,13 +31,11 @@ class InvoiceResponse(InvoiceBase):
     invoice_number: str
     date: datetime
     status: InvoiceStatus
+    fullname: Optional[str] = None
     items: List[InvoiceItemResponse] = []
       
     model_config = ConfigDict(from_attributes=True)
 
-
-class InvoiceWithRelationsResponse(InvoiceResponse):
-    fullname: str
 
 class InvoicePaginationResponse(BaseModel):  
     counter: int
@@ -45,6 +43,6 @@ class InvoicePaginationResponse(BaseModel):
     offset: int
     page: int
     page_size: int
-    articles: List[InvoiceWithRelationsResponse]  
+    articles: List[InvoiceResponse]  
 
     model_config = ConfigDict(from_attributes=True)

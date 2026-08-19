@@ -1,5 +1,6 @@
 from typing import Dict, List, Any
 
+from sqlalchemy.orm import selectinload
 from sqlmodel import Sequence, func, select, asc, desc
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -12,20 +13,34 @@ class ArticleRepository:
         self.db = db
 
     async def get(self, article_id: int) -> Article | None:
-        return await self.db.get(Article, article_id)    
+        """Perfecto: Carga el artículo con sus relaciones de forma limpia"""
+        query = (
+            select(Article)
+            .options(selectinload(Article.category))
+            .options(selectinload(Article.brand))
+            .where(Article.id == article_id)
+        )
+        result = await self.db.exec(query)
+        return result.first()    
 
-
-    async def get_by_category(self, category_id: int) -> List[Article]:
+    async def get_by_category(self, category_id: int) -> list[Article]:
+        """Usa selectinload en lugar de join si solo quieres los datos relacionados"""
         result = await self.db.exec(
-            select(Article).where(Article.category_id == category_id)
-        )            
+            select(Article)
+            .options(selectinload(Article.category))
+            .options(selectinload(Article.brand))
+            .where(Article.category_id == category_id)
+        )           
         return result.all()
 
-
-    async def get_by_brand(self, brand_id: int) -> List[Article]:        
+    async def get_by_brand(self, brand_id: int) -> list[Article]:        
+        """Idem para la marca"""
         result = await self.db.exec(
-            select(Article).where(Article.brand_id == brand_id)
-        )            
+            select(Article)
+            .options(selectinload(Article.category))
+            .options(selectinload(Article.brand))
+            .where(Article.brand_id == brand_id)
+        )           
         return result.all()
 
 

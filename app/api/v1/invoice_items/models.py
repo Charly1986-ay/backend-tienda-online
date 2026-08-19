@@ -15,6 +15,7 @@ class InvoiceItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)  
     invoice_id: int = Field(foreign_key='invoice.id', index=True)  
     article_id: int = Field(foreign_key='article.id', index=True)  
+    detail: Optional[str]
     units: int = Field(default=1, ge=1)    
     price: Decimal = Field(default=Decimal("0.00"), ge=0, decimal_places=2)
     subtotal: Decimal = Field(default=Decimal("0.00"), ge=0, decimal_places=2)    

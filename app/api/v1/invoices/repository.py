@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from sqlalchemy.orm import selectinload
 from sqlmodel import Sequence, asc, desc, func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -13,8 +14,26 @@ class InvoiceRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
+
     async def get(self, invoice_id: int) -> Invoice | None:
-        return await self.db.get(Invoice, invoice_id) 
+        query = (
+            select(Invoice)
+            .options(selectinload(Invoice.client))
+            .where(Invoice.id == invoice_id)
+        )
+        result = await self.db.exec(query)
+        return result.first()
+
+
+    async def get_number_invoice(self, number_invoice: str) -> Invoice | None:
+        query = (
+            select(Invoice)
+            .options(selectinload(Invoice.client))
+            .where(Invoice.invoice_number == number_invoice)
+        )
+        result = await self.db.exec(query)
+        return result.first()
+
 
     async def count_all(
         self, 
@@ -38,6 +57,7 @@ class InvoiceRepository:
             
         result = await self.db.exec(query)
         return result.first() or 0
+
 
     async def get_all_pagination(
         self, 
@@ -81,15 +101,16 @@ class InvoiceRepository:
         result = await self.db.exec(query)
         return result.all()    
 
+
     async def create_invoice(self, invoice: Invoice) -> Invoice:
         """Solo añade la factura base para que la BD le asigne un ID."""
         self.db.add(invoice)
         await self.db.flush()
         return invoice
 
+
     async def update(self, invoice: Invoice, updates: Dict[str, Any]) -> Invoice:
         for key, value in updates.items():
-            setattr(invoice, key, value)
-    
+            setattr(invoice, key, value)    
         self.db.add(invoice)
         return invoice    
