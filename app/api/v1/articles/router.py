@@ -81,7 +81,7 @@ async def get_article_by_id(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Articulo no encontrado'
-        )    
+        ) 
 
 
 @router.post(
@@ -202,8 +202,7 @@ async def _process_article_update(
             case 'update':
                 return await article_service.update_article(data=data, article_id=article_id, user_id=user_id)
             case _:
-                raise ValueError(f"Operación no válida: {operation}")
-                
+                raise ValueError(f"Operación no válida: {operation}")                
     except ArticleNotFound:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

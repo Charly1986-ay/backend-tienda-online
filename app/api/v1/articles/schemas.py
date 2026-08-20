@@ -60,7 +60,7 @@ class ArticleUpdate(ArticleValidatedBase):
 
 
 class UpdateStock(BaseModel):    
-    units: int = Field(..., description="Unidades a añadir o quitar")
+    stock: int = Field(..., description="Unidades a añadir o quitar")
 
 
 class UpdatePrice(BaseModel):  

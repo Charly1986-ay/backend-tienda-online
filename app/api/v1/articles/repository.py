@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 from sqlalchemy.orm import selectinload
 from sqlmodel import Sequence, func, select, asc, desc

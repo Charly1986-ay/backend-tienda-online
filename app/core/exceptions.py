@@ -89,3 +89,21 @@ class PriceMismatch(HTTPException):
             status_code=status.HTTP_400_BAD_REQUEST, 
             detail=detail
         )
+
+
+class CategoryNotFound(HTTPException):
+    '''Excepción lanzada cuando una categoría no es encontrada en base de datos.'''
+    def __init__(self, detail: str = 'Categoría no es encontrada'):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail=detail
+    )
+
+
+class BrandNotFound(HTTPException):
+    '''Excepción lanzada cuando una marca no es encontrada en base de datos.'''
+    def __init__(self, detail: str = 'Marca no es encontrada'):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail=detail
+    )

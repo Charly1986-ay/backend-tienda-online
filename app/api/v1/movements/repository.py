@@ -1,4 +1,3 @@
-from typing import List
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.api.v1.movements.models import GenericActivityLog
@@ -13,14 +12,14 @@ class ActivityRepository:
         return await self.db.get(GenericActivityLog, id) 
 
 
-    async def get_movements_by_user(self, user_id: int) -> List[GenericActivityLog]:
+    async def get_movements_by_user(self, user_id: int) -> list[GenericActivityLog]:
         result = await self.db.exec(
             select(GenericActivityLog).where(GenericActivityLog.user_id == user_id)
         )
         return list(result.all())
 
 
-    async def get_movements_by_type(self, movement_type: MovementType) -> List[GenericActivityLog]:
+    async def get_movements_by_type(self, movement_type: MovementType) -> list[GenericActivityLog]:
         result = await self.db.exec(
             select(GenericActivityLog).where(GenericActivityLog.movement_type == movement_type)
         )

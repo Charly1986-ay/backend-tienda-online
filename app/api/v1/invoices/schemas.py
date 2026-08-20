@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional
-from pydantic import BaseModel, ConfigDict, computed_field
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 from app.api.v1.invoice_items.schemas import InvoiceItemCreate
 from app.api.v1.invoice_items.schemas import InvoiceItemResponse
@@ -20,11 +20,14 @@ class InvoiceBase(BaseModel):
                 total += item.subtotal
         return total
 
+
 class InvoiceCreate(InvoiceBase):
-    items: List[InvoiceItemCreate]
+    items: list[InvoiceItemCreate]
+
 
 class UpdateInvoiceStatus(BaseModel):
     status: InvoiceStatus
+
 
 class InvoiceResponse(InvoiceBase):
     id: int
@@ -32,7 +35,7 @@ class InvoiceResponse(InvoiceBase):
     date: datetime
     status: InvoiceStatus
     fullname: Optional[str] = None
-    items: List[InvoiceItemResponse] = []
+    items: list[InvoiceItemResponse] = Field(default_factory=list)
       
     model_config = ConfigDict(from_attributes=True)
 
@@ -43,6 +46,6 @@ class InvoicePaginationResponse(BaseModel):
     offset: int
     page: int
     page_size: int
-    articles: List[InvoiceResponse]  
+    invoices: list[InvoiceResponse]  
 
     model_config = ConfigDict(from_attributes=True)

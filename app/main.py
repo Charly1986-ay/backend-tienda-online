@@ -13,6 +13,8 @@ from app.api.v1.articles.router import router as articles_router
 from app.api.v1.auth.router import router as auth_router
 from app.api.v1.invoices.router import router as invoice_router
 from app.api.v1.users.router import router as user_router
+from app.api.v1.categories.router import router as categories_router
+from app.api.v1.brands.router import router as brands_router
 
 load_dotenv()
 
@@ -75,6 +77,8 @@ app.include_router(articles_router, prefix="/api/v1/articles", tags=["Articles"]
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(user_router, prefix="/api/v1/users", tags=["Users"])
 app.include_router(invoice_router, prefix="/api/v1/invoices", tags=["Invoices"])
+app.include_router(categories_router, prefix="/api/v1/categories", tags=["Categories"])
+app.include_router(brands_router, prefix="/api/v1/brands", tags=["Brands"])
 
 @app.get('/')
 def get_root():

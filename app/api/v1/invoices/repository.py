@@ -18,7 +18,10 @@ class InvoiceRepository:
     async def get(self, invoice_id: int) -> Invoice | None:
         query = (
             select(Invoice)
-            .options(selectinload(Invoice.client))
+            .options(
+                selectinload(Invoice.client),
+                selectinload(Invoice.items)
+            )
             .where(Invoice.id == invoice_id)
         )
         result = await self.db.exec(query)

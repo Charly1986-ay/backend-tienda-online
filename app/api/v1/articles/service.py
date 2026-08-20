@@ -240,4 +240,4 @@ class ArticleService:
         }
 
     async def get_article_by_id(self, article_id: int) -> Article:
-        return await self.article_repo.get(article_id=article_id)
+        return await self._get_or_404(article_id=article_id)    

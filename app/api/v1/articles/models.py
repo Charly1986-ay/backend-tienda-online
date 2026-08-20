@@ -23,8 +23,14 @@ class Article(SQLModel, table=True):
     image_url: Optional[str] = Field(default=None)    
 
     # Relaciones para navegar fácilmente entre objetos en SQLAlchemy
-    brand: Optional[Brand] = Relationship(back_populates='articles')
-    category: Optional[Category] = Relationship(back_populates='articles')
+    brand: Optional[Brand] = Relationship(
+        back_populates='articles',
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    category: Optional[Category] = Relationship(
+        back_populates='articles',
+        sa_relationship_kwargs={"lazy": "selectin"}
+    )
 
     # --- PROPIEDADES VIRTUALES ---
     @property

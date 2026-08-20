@@ -1,6 +1,5 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
-from typing import List
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -76,7 +75,7 @@ class InvoiceService:
                 if article_db.stock < item.units:
                     raise InsufficientInventory()
 
-                if article_db.price < item.price:
+                if article_db.price > item.price:
                     raise PriceMismatch()
 
                 item_db = InvoiceItem(
@@ -90,7 +89,7 @@ class InvoiceService:
                 await self.item_repo.create_item(item_db)   
 
                 data_article = UpdateStock(
-                    units=(prev_stock - item.units)
+                    stock=(prev_stock - item.units)
                 )  
                 
                 update_article = data_article.model_dump(
@@ -121,7 +120,9 @@ class InvoiceService:
             await self.activity_repo.create_movement(log=log_invoice)
 
             await self.db.refresh(invoice_db)            
+            #invoice_complete = await self.invoice_repo.get(invoice_db.id)
             return invoice_db
+            #return invoice_complete
 
 
     async def change_status(
@@ -221,6 +222,6 @@ class InvoiceService:
     async def get_items(
         self,
         invoice_id: int
-    ) -> List[InvoiceItem]:
+    ) -> list[InvoiceItem]:
         items = await self.item_repo.get_items(invoice_id=invoice_id) or []
         return items
