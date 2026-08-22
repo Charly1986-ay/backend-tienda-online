@@ -11,6 +11,7 @@ from app.api.v1.brands.models import Brand
 from app.api.v1.categories.models import Category
 from app.api.v1.invoices.models import Invoice
 from app.api.v1.invoice_items.models import InvoiceItem
+from app.api.v1.payments.models import Payment
 from app.api.v1.movements.models import GenericActivityLog
 
 # 1. Creamos el motor asíncrono (create_async_engine)

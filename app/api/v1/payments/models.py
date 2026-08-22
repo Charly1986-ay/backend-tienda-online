@@ -1,12 +1,13 @@
-import datetime
+from datetime import datetime, timezone
+from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Column, Field, Numeric, Relationship, SQLModel
 
 from app.api.v1.payments.enums import PaymentStatus, TypeCurrency
 
 
-if TYPE_CHECKING:   
+if TYPE_CHECKING:
     from app.api.v1.invoices.models import Invoice
 
 
@@ -25,11 +26,9 @@ class Payment(SQLModel, table=True):
         index=True
     )
 
-    # Dinero expresado en la unidad mínima de la moneda
-    # Ej: $920.00 -> 92000
-    amount: int = Field(
-        default=0,
-        ge=0
+    amount: Decimal = Field(
+        default=Decimal("0.00"),
+        sa_column=Column(Numeric(10, 2, asdecimal=False)) # 👈 Le dice a SQLAlchemy que lo maneje como float internamente
     )
 
     currency: str = Field(
@@ -47,11 +46,10 @@ class Payment(SQLModel, table=True):
     )
 
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(datetime.timezone.utc),
+        default_factory=lambda: datetime.now(timezone.utc),
         nullable=False
     )
 
-    # Relación con Invoice
     invoice: Optional["Invoice"] = Relationship(
         back_populates="payment",
         sa_relationship_kwargs={"lazy": "selectin"}

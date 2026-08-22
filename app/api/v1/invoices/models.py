@@ -40,7 +40,7 @@ class Invoice(SQLModel, table=True):
         back_populates='invoices',
         sa_relationship_kwargs={'lazy': 'selectin'}
     )
-    payment: Optional['Payment'] = Relationship(back_populates='booking')
+    payment: Optional['Payment'] = Relationship(back_populates='invoice')
 
 
     @property

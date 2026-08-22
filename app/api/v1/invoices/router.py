@@ -1,12 +1,20 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Path 
+from fastapi import Query, status
 
+from app.api.v1.invoice_items.service import InvoiceItemsService
+
+from app.api.v1.payments.schemas import CardStripe
 from app.api.v1.users.models import User
-from app.core.exceptions import ArticleNotFound, InsufficientInventory, InvoiceNotFound, PriceMismatch
+
+from app.core.exceptions import ArticleNotFound, InsufficientInventory 
+from app.core.exceptions import InvoiceNotFound, PaymentException 
+from app.core.exceptions import PriceMismatch
 
 from .enums import InvoiceSortField, InvoiceStatus
-from .schemas import InvoiceCreate, InvoicePaginationResponse, InvoiceResponse
+from .schemas import InvoiceCreate, InvoicePaginationResponse
+from .schemas import InvoiceResponse
 from .service import InvoiceService
 
 from app.core.db import get_session
@@ -91,24 +99,34 @@ async def get_items(
     ),
     db: AsyncSession = Depends(get_session)
 ) -> InvoiceResponse:
-    invoice_service = InvoiceService(db=db)
+    invoice_service = InvoiceItemsService(db=db)
 
-    return invoice_service.get_items(invoice_id=invoice_id)
+    return await invoice_service.get_items(invoice_id=invoice_id)
 
 
 @router.post('/create', status_code=status.HTTP_201_CREATED)
-async def create(
+async def create_invoice(
     data: InvoiceCreate,
+    card: CardStripe,
     user: User = client_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> InvoiceResponse:
     invoice_service = InvoiceService(db=db)
 
     try:
-        invoice = await invoice_service.create_invoice(data=data, user_id=user.id)
+        invoice = await invoice_service.create_invoice(
+            data=data, 
+            card=card, 
+            user_id=user.id
+        )
         return invoice
-    except (ArticleNotFound, InsufficientInventory, PriceMismatch):
+    except (
+        ArticleNotFound, 
+        InsufficientInventory, 
+        PriceMismatch, 
+        PaymentException
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='No se pudo procesar la factura'
+            detail='Lo sentimos, no se pudo completar la compra'
         )
