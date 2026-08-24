@@ -3,8 +3,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.db import get_session
 from app.core.security import oauth2_schema, decode_token
 from app.core.exceptions import CredentialsException, UserInactiveException, ForbiddenException
-from app.api.v1.users.models import User, UserStatus, Role
-from app.api.v1.users.repository import UserRepository
+from app.models.users import User, UserStatus, Role
+from app.repositories.users import UserRepository
 
 async def get_current_user(
     token: str = Depends(oauth2_schema),

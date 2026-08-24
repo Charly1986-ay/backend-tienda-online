@@ -1,8 +1,11 @@
 FORBIDDEN_WORDS = [
     # SQL Injection / Comandos
-    'select', 'union', 'drop', 'truncate', 'insert', 'update', 'delete', 'exec',
+    'select', 'union', 'drop', 'truncate', 'insert', 'update', 
+    'delete', 'exec',
     # XSS / Scripts
-    '<script', 'javascript:', 'onerror', 'onload', 'eval(',
+    '<script', '</script', 'javascript:', 'vbscript:','data:text/html',
+    'onerror=', 'onload=', 'onclick=', 'onmouseover=', 'onfocus=',
+    'onmouseenter=', 'eval(', 'settimeout(', 'setinterval(',
     # Secretos / Tokens
     'access_token', 'refresh_token', 'password', 'api_key', 'secret'
 ]

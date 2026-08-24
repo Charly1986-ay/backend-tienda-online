@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 
 from .schemas import TokenResponse, UserPublic, UserLogin
-from app.api.v1.auth.service import AuthService
+from app.services.auth import AuthService
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 

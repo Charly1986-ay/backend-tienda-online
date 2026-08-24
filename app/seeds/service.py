@@ -2,11 +2,11 @@ from contextlib import asynccontextmanager
 from pwdlib import PasswordHash
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.api.v1.brands.models import Brand
+from app.models.brands import Brand
 from app.core.db import engine, init_db
-from app.api.v1.users.models import User
-from app.api.v1.categories.models import Category
-from app.api.v1.articles.models import Article
+from app.models.users import User
+from app.models.categories import Category
+from app.models.articles import Article
 
 from app.seeds.data.users import USERS
 from app.seeds.data.brands import BRANDS

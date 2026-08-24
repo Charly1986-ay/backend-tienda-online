@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
-from app.api.v1.users.models import Role
+from app.models.users import Role
 
 class UserLogin(BaseModel):
     email: EmailStr    

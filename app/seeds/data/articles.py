@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from app.api.v1.articles.models import UnitsType, StatusArticle
+from app.models.articles import UnitsType, StatusArticle
 
 ARTICLES = [
     {

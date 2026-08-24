@@ -1,4 +1,4 @@
-from app.api.v1.users.models import Role
+from app.models.users import Role
 
 USERS = [
     {

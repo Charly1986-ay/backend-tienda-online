@@ -6,13 +6,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.config import settings
 
 # IMPORTA TUS MODELOS AQUÍ para que SQLModel los registre en el metadata
-from app.api.v1.articles.models import Article
-from app.api.v1.brands.models import Brand
-from app.api.v1.categories.models import Category
-from app.api.v1.invoices.models import Invoice
-from app.api.v1.invoice_items.models import InvoiceItem
-from app.api.v1.payments.models import Payment
-from app.api.v1.movements.models import GenericActivityLog
+from app.models.articles import Article
+from app.models.brands import Brand
+from app.models.categories import Category
+from app.models.invoice import Invoice
+from app.models.invoice_items import InvoiceItem
+from app.models.payments import Payment
+from app.models.movements import GenericActivityLog
 
 # 1. Creamos el motor asíncrono (create_async_engine)
 engine = create_async_engine(
