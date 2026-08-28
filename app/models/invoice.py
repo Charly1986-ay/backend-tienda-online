@@ -7,7 +7,7 @@ from app.enums.invoices import InvoiceStatus
 
 
 if TYPE_CHECKING:
-    from app.models.invoice_items import InvoiceItem
+    from app.models.items import InvoiceItem
     from app.models.payments import Payment
     from app.models.users import User
 

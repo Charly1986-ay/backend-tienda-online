@@ -1,9 +1,9 @@
 from typing import List
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.invoice_items import InvoiceItem
+from app.models.items import InvoiceItem
 
-class InvoiceItemRepository:
+class ItemRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 

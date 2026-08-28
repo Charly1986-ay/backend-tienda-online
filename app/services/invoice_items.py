@@ -6,6 +6,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.repositories.article import ArticleRepository
 from app.api.v1.admin.articles.schemas import UpdateStock
+from app.models.items import InvoiceItem
+
+from app.models.movements import GenericActivityLog
 
 from app.enums.movements import MovementType, TargetType
 
@@ -13,24 +16,22 @@ from app.repositories.movements import ActivityRepository
 from app.core.exceptions import ArticleNotFound, InsufficientInventory 
 from app.core.exceptions import PriceMismatch
 
-from app.repositories.invoice_items import InvoiceItemRepository
+from app.repositories.items import ItemRepository
 
 if TYPE_CHECKING:
-    from app.models.invoice import Invoice
-    from app.models.invoice_items import InvoiceItem
-    from app.models.movements import GenericActivityLog    
-    from app.api.v1.public.invoice_items.schemas import InvoiceItemCreate
+    from app.models.invoice import Invoice          
+    from app.api.v1.public.invoice_items.schemas import ItemCreate
 
-class InvoiceItemsService:    
+class ItemsService:    
     def __init__(self, db: AsyncSession):
-        self.items_repo = InvoiceItemRepository(db=db)
+        self.items_repo = ItemRepository(db=db)
         self.article_repo = ArticleRepository(db=db)
         self.activity_repo = ActivityRepository(db=db)
 
 
     async def insert_items(
         self, 
-        items: list[InvoiceItemCreate], 
+        items: list[ItemCreate], 
         invoice: Invoice, 
         user_id: int
     ) -> None:
@@ -85,7 +86,7 @@ class InvoiceItemsService:
 
     async def refund_items(
             self, 
-            items: list[InvoiceItemCreate],            
+            items: list[ItemCreate],            
             user_id: int
         ) -> None:
             for item in items:

@@ -11,4 +11,4 @@ class PaymentStatus(str, Enum):
 class TypeCurrency(str, Enum):
     USD = 'usd'
     EUR = 'eur'
-    ARG = 'ars'
+    ARS = 'ars'

@@ -6,9 +6,10 @@ from contextlib import asynccontextmanager
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.services.invoice_items import InvoiceItemsService
+from app.services.invoice_items import ItemsService
 from app.enums.invoices import InvoiceStatus
 from app.models.invoice import Invoice
+from app.api.v1.public.checkout.schemas import InvoiceCreate
 
 from app.repositories.invoices import InvoiceRepository
 
@@ -22,10 +23,8 @@ from app.core.exceptions import InvoiceNotFound
 from app.core.pagination import get_pagination
 
 
-if TYPE_CHECKING:
-    from app.api.v1.public.checkout.schemas import InvoiceCreate
-    from app.api.v1.admin.invoices.schemas import UpdateInvoiceStatus
-    from app.api.v1.public.payments.schemas import CardStripe
+if TYPE_CHECKING:    
+    from app.api.v1.admin.invoices.schemas import UpdateInvoiceStatus    
 
 
 class InvoiceService:
@@ -35,7 +34,7 @@ class InvoiceService:
         self.activity_repo = ActivityRepository(db=db)
         
         self.payment_service = PaymentService(db=db)
-        self.items_service = InvoiceItemsService(db=db)
+        self.items_service = ItemsService(db=db)
 
 
     @asynccontextmanager
@@ -48,10 +47,9 @@ class InvoiceService:
             await self.db.rollback()
             raise e
 
-    async def create_invoice(
+    async def Checkout(
         self, 
-        data: InvoiceCreate, 
-        card: CardStripe,
+        data: InvoiceCreate,        
         user_id: int
     ) -> Invoice:
         async with self._transaction():
@@ -75,7 +73,7 @@ class InvoiceService:
 
             # hacemos el pago    
             await self.payment_service.create_payment(
-                card=card,
+                card=data.card,
                 #user_id=user_id,
                 invoice=invoice_db
             )

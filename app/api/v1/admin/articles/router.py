@@ -85,7 +85,7 @@ async def get_article_by_id(
 
 
 @router.post(
-    '/register', 
+    '/insert', 
     response_model=ArticleResponse, 
     status_code=status.HTTP_201_CREATED,
     responses={
@@ -93,7 +93,7 @@ async def get_article_by_id(
         413: {"description": "El archivo excede el tamaño máximo permitido"}
     }
 )
-async def register_article(
+async def insert_article(
     data: Annotated[ArticleCreate, Depends(ArticleCreate.as_form)],
     image: Optional[UploadFile] = File(None),
     user: User = manager_assistant_dependency,
