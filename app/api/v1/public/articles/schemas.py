@@ -18,7 +18,7 @@ class ArticlePublicResponse(BaseModel):
 
 
 # Schema de paginación para la vista pública
-class ArticlePublicPaginationResponse(BaseModel):
+class ArticlePublicPagination(BaseModel):
     counter: int
     pages: int
     page: int

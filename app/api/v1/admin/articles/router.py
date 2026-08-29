@@ -5,7 +5,7 @@ from fastapi import Path, Query, UploadFile, status
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .....enums.articles import ArticleSortField, StatusArticle
+from app.enums.articles import ArticleSortField, StatusArticle
 from .schemas import ArticleCreate, ArticlePaginationResponse
 from .schemas import UpdateBrand, UpdateCategory, UpdatePrice
 from .schemas import ArticleResponse, ArticleUpdate, UpdateStatus
