@@ -14,7 +14,7 @@ from .schemas import ArticlePublicPagination
 router = APIRouter()
 
 @router.get(
-    '/', 
+    '/all', 
     response_model=ArticlePublicPagination,
     status_code=status.HTTP_200_OK
 )
@@ -27,11 +27,11 @@ async def get_all(
     sort_by: ArticleSortField = Query(
         default=ArticleSortField.ID, 
         description='Campo por el cual ordenar'
-    ),
+    ),    
     sort_order: Literal['asc', 'desc'] = Query(
         default='asc', 
         description='Dirección del ordenamiento: asc o desc'
-    ),    
+    ),
     db: AsyncSession = Depends(get_session)
 ) -> ArticlePublicPagination:
     article_service = ArticleService(db=db)
@@ -42,6 +42,7 @@ async def get_all(
         detail=detail,
         brand=brand,
         category=category,
+        status='available',
         sort_by=sort_by,       
         sort_order=sort_order
     )

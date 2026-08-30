@@ -202,13 +202,15 @@ class ArticleService:
         detail: str | None = None,
         brand: str | None = None,     
         category: str | None = None,
+        status: str | None = None,
         sort_by: str = 'id',            
         sort_order: str = 'asc'        
     ) -> dict:         
         counter = await self.article_repo.count_all(
             detail=detail, 
             brand=brand, 
-            category=category
+            category=category,
+            status=status
         )
 
         pagination = get_pagination(
@@ -223,6 +225,7 @@ class ArticleService:
             detail=detail, 
             brand=brand,
             category=category,
+            status=status,
             sort_by=sort_by,           
             sort_order=sort_order      
         )

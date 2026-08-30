@@ -171,7 +171,7 @@ class InvoiceService:
         invoice_list = []
         for invoice, user in rows:
             invoice_dict = invoice.model_dump()
-            invoice_dict['full_name'] = user.full_name         
+            invoice_dict['fullname'] = user.full_name         
             invoice_list.append(invoice_dict)
 
         return {

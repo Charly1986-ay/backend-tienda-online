@@ -37,10 +37,15 @@ async def get_all(
         default=ArticleSortField.ID, 
         description='Campo por el cual ordenar'
     ),
+    status: Literal['all', 'available', 'unavailable'] = Query(
+        default='all', 
+        description='Filtrado por estados de los articulos'
+    ),
     sort_order: Literal['asc', 'desc'] = Query(
         default='asc', 
         description='Dirección del ordenamiento: asc o desc'
     ),
+    user: User = manager_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ArticlePaginationResponse:
     article_service = ArticleService(db=db)
@@ -51,6 +56,7 @@ async def get_all(
         detail=detail,
         brand=brand,
         category=category,
+        status=status,
         sort_by=sort_by,       
         sort_order=sort_order
     )

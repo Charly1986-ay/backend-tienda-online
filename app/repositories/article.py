@@ -48,7 +48,8 @@ class ArticleRepository:
         self, 
         detail: str | None = None,
         brand: str | None = None, 
-        category: str | None = None            
+        category: str | None = None,
+        status: str | None = None            
     ) -> int:        
         query = select(func.count()).select_from(Article)        
         
@@ -59,7 +60,9 @@ class ArticleRepository:
         if brand:
             query = query.where(Brand.name.ilike(f'%{brand}%'))
         if category:
-            query = query.where(Category.name.ilike(f'%{category}%'))        
+            query = query.where(Category.name.ilike(f'%{category}%'))   
+        if status and status != 'all':
+            query = query.where(Article.status==status)     
             
         result = await self.db.exec(query)
         return result.first() or 0
@@ -71,7 +74,8 @@ class ArticleRepository:
         offset: int, 
         detail: str | None = None,
         brand: str | None = None, 
-        category: str | None = None,        
+        category: str | None = None, 
+        status: str | None = None,       
         sort_by: str = 'id',
         sort_order: str = 'asc'
     ) -> Sequence[tuple[Article, Category, Brand]]:
@@ -82,7 +86,9 @@ class ArticleRepository:
         if brand:
             query = query.where(Brand.name.ilike(f'%{brand}%'))
         if category:
-            query = query.where(Category.name.ilike(f'%{category}%'))                   
+            query = query.where(Category.name.ilike(f'%{category}%'))  
+        if status and status != 'all':
+            query = query.where(Article.status==status)                 
         
         allowed_columns = {
             'id': Article.id,
