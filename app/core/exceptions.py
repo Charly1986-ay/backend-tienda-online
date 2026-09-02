@@ -55,6 +55,24 @@ class UserNotFound(HTTPException):
     )
 
 
+class CategoryExistsException (HTTPException):
+    '''Excepción se produce cuando la categoría existe en la base de datos.'''
+    def __init__(self, detail: str = 'La categoría ya existe'):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail=detail
+    )
+
+
+class BrandExistsException (HTTPException):
+    '''Excepción se produce cuando la marca existe en la base de datos.'''
+    def __init__(self, detail: str = 'La marca ya existe'):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail=detail
+    )
+
+
 class ArticleNotFound(HTTPException):
     '''Excepción lanzada cuando un articulo no es encontrado en base de datos.'''
     def __init__(self, detail: str = 'Articulo no encontrado'):

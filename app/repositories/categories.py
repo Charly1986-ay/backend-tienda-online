@@ -1,3 +1,5 @@
+from typing import Dict
+
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -26,5 +28,15 @@ class CategoryRepository:
         return result.one_or_none()
 
 
-    async def create(self):
-        pass
+    async def create(self, data: Category) -> Category:
+        self.db.add(data)
+        await self.db.flush()
+        return data
+
+
+    async def update(self, category: Category, updates: Dict[str, str]) -> Category:
+        for key, value in updates.items():
+            setattr(category, key, value)
+        
+        self.db.add(category)
+        return category
