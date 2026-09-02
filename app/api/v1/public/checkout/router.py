@@ -1,6 +1,3 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -17,8 +14,7 @@ from app.core.exceptions import PaymentException, PriceMismatch
 
 from app.utils.permission import client_dependency
 
-if TYPE_CHECKING:  
-    from app.services.invoice import InvoiceService
+from app.services.invoice import InvoiceService
 
 
 router = APIRouter()

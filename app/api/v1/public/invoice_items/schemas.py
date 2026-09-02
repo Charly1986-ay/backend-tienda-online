@@ -15,7 +15,7 @@ class ItemBase(BaseModel):
 class ItemCreate(ItemBase):
     pass
 
-class ItemResponse(ItemBase):
+class ItemPublic(ItemBase):
     detail: str
         
     model_config = ConfigDict(from_attributes=True)

@@ -11,7 +11,7 @@ class PaymentCreate(BaseModel):
     currency: str = TypeCurrency.USD         
 
 
-class PaymentResponse(BaseModel):
+class PaymentPublic(BaseModel):
     id: int   
     invoice_id: int
     amount: int

@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, computed_field
 
 from app.api.v1.public.invoice_items.schemas import ItemCreate 
-from app.api.v1.public.invoice_items.schemas import ItemResponse
+from app.api.v1.public.invoice_items.schemas import ItemPublic
 from app.api.v1.public.payments.schemas import CardStripe
 from app.enums.invoices import InvoiceStatus
 
@@ -39,6 +39,6 @@ class InvoicePublic(InvoiceBase):
     date: datetime
     status: InvoiceStatus
     fullname: Optional[str] = None 
-    items: list[ItemResponse]   
+    items: list[ItemPublic]   
       
     model_config = ConfigDict(from_attributes=True)

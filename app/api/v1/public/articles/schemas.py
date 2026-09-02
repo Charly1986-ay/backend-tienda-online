@@ -21,6 +21,7 @@ class ArticlePublicResponse(BaseModel):
 class ArticlePublicPagination(BaseModel):
     counter: int
     pages: int
+    offset: int
     page: int
     page_size: int
     articles: List[ArticlePublicResponse]

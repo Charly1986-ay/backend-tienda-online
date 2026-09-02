@@ -3,7 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, Path 
 from fastapi import Query, status
 
-from app.api.v1.public.invoice_items.schemas import ItemResponse
+from app.api.v1.public.invoice_items.schemas import ItemPublic
 from app.services.invoice_items import ItemsService
  
 from app.core.exceptions import InvoiceNotFound
@@ -83,7 +83,7 @@ async def get_invoice(
 
 @router.get(
     '/{invoice_id}/items', 
-    response_model=list[ItemResponse],
+    response_model=list[ItemPublic],
     status_code=status.HTTP_200_OK
 )
 async def get_items(
@@ -94,7 +94,7 @@ async def get_items(
         examples=[1]
     ),
     db: AsyncSession = Depends(get_session)
-) -> ItemResponse:
+) -> ItemPublic:
     invoice_service = ItemsService(db=db)
 
     return await invoice_service.get_items(invoice_id=invoice_id)
