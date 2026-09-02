@@ -43,4 +43,10 @@ USERS = [
         'role': Role.MANAGER.value,
         'password': 'pruebas123!'
     },
+    {
+        'email': 'patrirod@example.com',
+        'full_name': 'Patricia Rodríguez',        
+        'role': Role.IT_SUPPORT_ESPECIALIST.value,
+        'password': 'Patriro123!'
+    },
 ]
