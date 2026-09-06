@@ -45,6 +45,7 @@ def require_roles(*allowed_roles: Role):
 # --- Atajos de Dependencias para tus Rutas ---
 manager_dependency = Depends(require_roles(Role.MANAGER))
 manager_assistant_dependency = Depends(require_roles(Role.ECOMMERCE_ASSISTANT, Role.MANAGER))
+support_assistant_dependency = Depends(require_roles(Role.ECOMMERCE_ASSISTANT, Role.IT_SUPPORT_ESPECIALIST))
 ecommerce_assistant_dependency = Depends(require_roles(Role.ECOMMERCE_ASSISTANT))
 client_dependency = Depends(require_roles(Role.CLIENT))
 it_support_specialist = Depends(require_roles(Role.IT_SUPPORT_ESPECIALIST))

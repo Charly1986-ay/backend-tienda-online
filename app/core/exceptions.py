@@ -82,6 +82,15 @@ class ArticleNotFound(HTTPException):
     )
 
 
+class ArticleExist(HTTPException):
+    '''Excepción lanzada cuando un articulo es encontrado en base de datos.'''
+    def __init__(self, detail: str = 'Articulo ya existe'):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail=detail
+    )
+
+
 class InvoiceNotFound(HTTPException):
     '''Excepción lanzada cuando una factura no es encontrado en base de datos.'''
     def __init__(self, detail: str = 'Factura no encontrado'):

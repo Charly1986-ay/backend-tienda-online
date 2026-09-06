@@ -21,7 +21,7 @@ router = APIRouter()
 async def get_all(  
     page_size: int = Query(default=10, ge=1, le=50),
     page: int = Query(default=1, ge=1),  
-    detail: Optional[str] = Query(default=None, min_length=2, max_length=50),
+    title: Optional[str] = Query(default=None, min_length=2, max_length=50),
     brand: Optional[str] = Query(default=None, min_length=2, max_length=50),
     category: Optional[str] = Query(default=None, min_length=2, max_length=50),    
     sort_by: ArticleSortField = Query(
@@ -39,7 +39,7 @@ async def get_all(
     pagination = await article_service.get_all_pagination(
         page_size=page_size,
         page=page,
-        detail=detail,
+        title=title,
         brand=brand,
         category=category,
         status='available',

@@ -127,6 +127,7 @@ async def seed_articles(db: AsyncSession) -> None:
 
             if category and brand:                    
                 db.add(Article(
+                    title=data.get('title'),
                     detail=data.get('detail'),
                     slug=data.get('slug'),  # <--- Añadido el slug del artículo que creamos antes
                     stock=data.get('stock'),

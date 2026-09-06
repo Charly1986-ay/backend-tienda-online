@@ -10,7 +10,8 @@ from app.models.brands import Brand
 class Article(SQLModel, table=True):
     __tablename__ = 'article'
     __table_args__ = {'extend_existing': True}    
-    id: Optional[int] = Field(default=None, primary_key=True)    
+    id: Optional[int] = Field(default=None, primary_key=True)  
+    title: str = Field(unique=True, index=True)  
     detail: Optional[str] = Field(default=None)  
     stock: int = Field(default=1, ge=0)    
     cost: Decimal = Field(default=Decimal('0.00'), ge=0, decimal_places=2)

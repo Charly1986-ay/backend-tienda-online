@@ -21,10 +21,14 @@ class ArticleRepository:
             .where(Article.id == article_id)
         )
         result = await self.db.exec(query)
-        return result.first()    
+        return result.first() 
 
-    async def get_by_category(self, category_id: int) -> list[Article]:
-        """Usa selectinload en lugar de join si solo quieres los datos relacionados"""
+    async def title_exists(self, title: str) -> bool:
+        query = select(Article.id).where(Article.title == title)
+        result = await self.db.exec(query)
+        return result.first() is not None 
+
+    async def get_by_category(self, category_id: int) -> list[Article]:        
         result = await self.db.exec(
             select(Article)
             .options(selectinload(Article.category))
@@ -33,8 +37,7 @@ class ArticleRepository:
         )           
         return result.all()
 
-    async def get_by_brand(self, brand_id: int) -> list[Article]:        
-        """Idem para la marca"""
+    async def get_by_brand(self, brand_id: int) -> list[Article]:       
         result = await self.db.exec(
             select(Article)
             .options(selectinload(Article.category))
@@ -46,7 +49,7 @@ class ArticleRepository:
 
     async def count_all(
         self, 
-        detail: str | None = None,
+        title: str | None = None,
         brand: str | None = None, 
         category: str | None = None,
         status: str | None = None            
@@ -55,8 +58,8 @@ class ArticleRepository:
         
         query = query.join(Brand).join(Category)
 
-        if detail:
-            query = query.where(Article.detail.ilike(f'%{detail}%'))
+        if title:
+            query = query.where(Article.title.ilike(f'%{title}%'))
         if brand:
             query = query.where(Brand.name.ilike(f'%{brand}%'))
         if category:
@@ -72,7 +75,7 @@ class ArticleRepository:
         self, 
         page_size: int, 
         offset: int, 
-        detail: str | None = None,
+        title: str | None = None,
         brand: str | None = None, 
         category: str | None = None, 
         status: str | None = None,       
@@ -81,8 +84,8 @@ class ArticleRepository:
     ) -> Sequence[tuple[Article, Category, Brand]]:
         query = select(Article, Category, Brand).join(Brand).join(Category)
 
-        if detail:  
-            query = query.where(Article.detail.ilike(f'%{detail}%')) 
+        if title:  
+            query = query.where(Article.title.ilike(f'%{title}%')) 
         if brand:
             query = query.where(Brand.name.ilike(f'%{brand}%'))
         if category:

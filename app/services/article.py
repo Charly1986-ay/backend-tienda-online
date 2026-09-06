@@ -19,7 +19,7 @@ from app.repositories.article import ArticleRepository
 from app.repositories.brands import BrandRepository
 from app.repositories.categories import CategoryRepository
 from app.repositories.movements import ActivityRepository
-from app.core.exceptions import ArticleNotFound
+from app.core.exceptions import ArticleExist, ArticleNotFound
 
 
 class ArticleService:
@@ -44,6 +44,12 @@ class ArticleService:
             return 'Sin Categoría'
         category = await self.category_repo.get(category_id=category_id)
         return category.name if category else 'Sin Categoría'
+
+    async def _exist_title(self, title: str) -> None:
+        """Verifica si el título ya existe y lanza una excepción si es así."""
+        exists = await self.article_repo.title_exists(title=title)
+        if exists:
+            raise ArticleExist()
 
     async def _get_or_404(self, article_id: int) -> Article:
         '''Método auxiliar para buscar el artículo o lanzar la excepción si no existe.'''
@@ -84,18 +90,25 @@ class ArticleService:
             await self.db.rollback()
             raise e
 
-    async def create_article(self, article: ArticleCreate, user_id: int) -> Article:
+    async def create_article(
+        self, article: ArticleCreate, user_id: int
+    ) -> Article:
+        # 1. Validamos primero (si existe, lanzará la excepción automáticamente)
+        await self._exist_title(title=article.title)
+
+        # 2. Si pasa la validación, abrimos la transacción y creamos
         async with self._transaction():
             article_db = Article(
+                title=article.title,
                 detail=article.detail,
-                stock=article.stock,                
+                stock=article.stock,
                 cost=article.cost,
                 price=article.price,
                 brand_id=article.brand_id,
                 category_id=article.category_id,
                 units_type=article.units_type,
-                image_url=article.image_url
-            )            
+                image_url=article.image_url,
+            )
             next_article = await self.article_repo.create_article(article=article_db)
 
             brand_name = await self._get_brand_name(next_article.brand_id)
@@ -105,22 +118,30 @@ class ArticleService:
                 user_id=user_id,
                 target_id=str(next_article.id),
                 movement_type=MovementType.CREATED,
-                details=f'Nuevo artículo NRO: {next_article.id} de la categoría {category_name} y brand {brand_name}'
+                details=f'Nuevo artículo NRO: {next_article.id} de la categoría {category_name} y brand {brand_name}',
             )
             await self.db.refresh(next_article)
             return next_article        
 
-    async def update_article(self, data: ArticleUpdate, article_id: int, user_id: int) -> Article:
+    async def update_article(
+        self, data: ArticleUpdate, article_id: int, user_id: int
+    ) -> Article:
+        # 1. Obtenemos el artículo primero para conocer sus datos actuales
+        article_db = await self._get_or_404(article_id)
+
+        # 2. Solo validamos si envió un título nuevo y es diferente al que ya tenía
+        if data.title is not None and data.title != article_db.title:
+            await self._exist_title(title=data.title)
+
         async with self._transaction():
-            article_db = await self._get_or_404(article_id)
             next_article = await self._update_article_data(article_db, data)
 
             await self._log_activity(
                 user_id=user_id,
                 target_id=str(next_article.id),
                 movement_type=MovementType.UPDATED,
-                details=f'Se actualizo el artículo NRO: {next_article.id}'
-            )            
+                details=f'Se actualizo el artículo NRO: {next_article.id}',
+            )
             await self.db.refresh(next_article)
             return next_article
 
@@ -199,7 +220,7 @@ class ArticleService:
         self,        
         page_size: int = 10,  
         page: int = 1,
-        detail: str | None = None,
+        title: str | None = None,
         brand: str | None = None,     
         category: str | None = None,
         status: str | None = None,
@@ -207,7 +228,7 @@ class ArticleService:
         sort_order: str = 'asc'        
     ) -> dict:         
         counter = await self.article_repo.count_all(
-            detail=detail, 
+            title=title, 
             brand=brand, 
             category=category,
             status=status
@@ -222,7 +243,7 @@ class ArticleService:
         rows = await self.article_repo.get_all_pagination(
             page_size=pagination['page_size'],
             offset=pagination['offset'],
-            detail=detail, 
+            title=title, 
             brand=brand,
             category=category,
             status=status,

@@ -6,8 +6,10 @@ from app.models.articles import UnitsType, StatusArticle
 
 class ArticlePublicResponse(BaseModel):
     id: int
-    detail: str
-    price: Decimal                  
+    title: str
+    detail: Optional[str] = None
+    price: Decimal   
+    stock: int               
     units_type: UnitsType
     status: StatusArticle
     image_url: Optional[str] = None

@@ -40,5 +40,5 @@ def save_uploaded_image(file: UploadFile) -> dict:
     return {
         'filename': filename,
         'content_type': file.content_type,
-        'url': f'/uploads/{filename}'
+        'url': filename
     }
