@@ -8,6 +8,6 @@ class UserStatus(str, Enum):
 
 class Role(str, Enum):
     CLIENT = 'client'                                # Cliente
-    ECOMMERCE_ASSISTANT = 'E-commerce Assistant'     # Asistente operativo y administrativo
+    ECOMMERCE_ASSISTANT = 'ecommerce_assistant'     # Asistente operativo y administrativo
     MANAGER = 'manager'                              # Gerente
-    IT_SUPPORT_ESPECIALIST = 'IT Support Specialist' # Soporte técnico IT
+    IT_SUPPORT_ESPECIALIST = 'it_support_specialist' # Soporte técnico IT

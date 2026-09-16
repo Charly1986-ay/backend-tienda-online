@@ -14,7 +14,7 @@ class StatusArticle(str, Enum):
 
 
 class ArticleSortField(str, Enum):
-    ID = "id"
-    TITLE = "title"
-    BRAND = "marca"
-    CATEGORY = "categoria"
+    ID = 'id'
+    TITLE = 'title'
+    BRAND = 'brand'
+    CATEGORY = 'category'

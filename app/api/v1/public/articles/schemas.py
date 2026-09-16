@@ -1,17 +1,17 @@
 from decimal import Decimal
 from typing import List, Optional
 from pydantic import BaseModel, ConfigDict
-from app.models.articles import UnitsType, StatusArticle
+from app.models.articles import UnitsType
 
 
 class ArticlePublicResponse(BaseModel):
     id: int
     title: str
+    slug: str
     detail: Optional[str] = None
     price: Decimal   
     stock: int               
-    units_type: UnitsType
-    status: StatusArticle
+    units_type: UnitsType   
     image_url: Optional[str] = None
     category_name: Optional[str] = None
     brand_name: Optional[str] = None

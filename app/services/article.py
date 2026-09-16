@@ -61,6 +61,9 @@ class ArticleService:
     async def _update_article_data(self, article_db: Article, data: object) -> Article:
         '''Método auxiliar para aplicar los cambios permitidos del esquema.'''
         updates = data.model_dump(exclude_unset=True)
+
+        if data.title is not None:
+            updates["slug"] = data.slug
         return await self.article_repo.update(article=article_db, updates=updates)
 
     async def _log_activity(
@@ -100,6 +103,7 @@ class ArticleService:
         async with self._transaction():
             article_db = Article(
                 title=article.title,
+                slug=article.slug,
                 detail=article.detail,
                 stock=article.stock,
                 cost=article.cost,
