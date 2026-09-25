@@ -46,6 +46,15 @@ class ArticleRepository:
         )           
         return result.all()
 
+    async def get_by_slug(self, slug: str) -> Article | None:        
+        query = (
+            select(Article)
+            .options(selectinload(Article.category))
+            .options(selectinload(Article.brand))
+            .where(Article.slug == slug)
+        )
+        result = await self.db.exec(query)
+        return result.first() 
 
     async def count_all(
         self, 

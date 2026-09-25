@@ -8,7 +8,7 @@ from app.core.db import get_session
 from app.enums.articles import ArticleSortField
 from app.services.article import ArticleService
 
-from .schemas import ArticlePublicPagination
+from .schemas import ArticlePublicPagination, ArticlePublicResponse
 
 
 router = APIRouter()
@@ -47,3 +47,17 @@ async def get_all(
         sort_order=sort_order
     )
     return pagination
+
+
+@router.get(
+    '/{slug}', 
+    response_model=ArticlePublicResponse, 
+    status_code=status.HTTP_200_OK
+)
+async def get_article_by_slug(
+    slug: str,
+    db: AsyncSession = Depends(get_session)   
+) -> ArticlePublicResponse:
+    article_service = ArticleService(db=db)
+
+    return await article_service.get_article_by_slug(slug=slug)

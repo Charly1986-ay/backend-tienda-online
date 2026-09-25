@@ -271,5 +271,15 @@ class ArticleService:
             'articles': articles_list
         }
 
+
     async def get_article_by_id(self, article_id: int) -> Article:
         return await self._get_or_404(article_id=article_id)    
+
+
+    async def get_article_by_slug(self, slug: str) -> Article:
+        article = await self.article_repo.get_by_slug(slug=slug)
+
+        if article is None:
+            raise ArticleNotFound()
+
+        return article
