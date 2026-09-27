@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 class ItemBase(BaseModel):
     article_id: int
+    title: str
     units: int = Field(default=1, ge=1)    
     price: Decimal = Field(default=Decimal("0.00"), ge=0, decimal_places=2)
 

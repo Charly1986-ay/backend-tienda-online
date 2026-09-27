@@ -54,7 +54,7 @@ class ItemsService:
             item_db = InvoiceItem(
                 invoice_id=invoice.id,
                 article_id=item.article_id,
-                detail=article_db.detail,
+                detail=article_db.title,
                 units=item.units,
                 price=item.price,
                 subtotal=item.subtotal  
@@ -85,42 +85,42 @@ class ItemsService:
 
 
     async def refund_items(
-            self, 
-            items: list[ItemCreate],            
-            user_id: int
-        ) -> None:
-            for item in items:
-                article_db = await self.article_repo.get(
-                    article_id=item.article_id
-                )
+        self, 
+        items: list[ItemCreate],            
+        user_id: int
+    ) -> None:
+        for item in items:
+            article_db = await self.article_repo.get(
+                article_id=item.article_id
+            )
             
-                if not article_db:
-                    raise ArticleNotFound()
+            if not article_db:
+                raise ArticleNotFound()
             
-                prev_stock = article_db.stock            
+            prev_stock = article_db.stock            
                    
             
-                data_article = UpdateStock(
-                    stock=(prev_stock + item.units)
-                )  
+            data_article = UpdateStock(
+                stock=(prev_stock + item.units)
+            )  
                             
-                update_article = data_article.model_dump(
-                    exclude_unset=True
-                )   
+            update_article = data_article.model_dump(
+                exclude_unset=True
+            )   
             
-                new_article = await self.article_repo.update(
-                    article=article_db,
-                    updates=update_article
-                )   
+            new_article = await self.article_repo.update(
+                article=article_db,
+                updates=update_article
+            )   
             
-                log_stock = GenericActivityLog(
-                    user_id=user_id,
-                    target_type=TargetType.ARTICLE.value,
-                    target_id=str(item.article_id),
-                    movement_type=MovementType.STOCK_CHANGE.value,
-                    details=f'Devolucción de stock artículo NRO. {item.article_id} de {prev_stock} a {new_article.stock} unidades'
-                )
-                await self.activity_repo.create_movement(log=log_stock)
+            log_stock = GenericActivityLog(
+                user_id=user_id,
+                target_type=TargetType.ARTICLE.value,
+                target_id=str(item.article_id),
+                movement_type=MovementType.STOCK_CHANGE.value,
+                details=f'Devolucción de stock artículo NRO. {item.article_id} de {prev_stock} a {new_article.stock} unidades'
+            )
+            await self.activity_repo.create_movement(log=log_stock)
 
 
     async def get_items(self, invoice_id: int) -> list[InvoiceItem]:
