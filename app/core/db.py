@@ -17,7 +17,7 @@ from app.models.movements import GenericActivityLog
 # 1. Creamos el motor asíncrono (create_async_engine)
 engine = create_async_engine(
     settings.DATABASE_URL, 
-    echo=True, 
+    echo=False, 
     connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {}
 )
 

@@ -281,5 +281,4 @@ class ArticleService:
 
         if article is None:
             raise ArticleNotFound()
-
         return article

@@ -4,6 +4,7 @@ from sqlalchemy.orm import selectinload
 from sqlmodel import Sequence, func, select, asc, desc
 from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.enums.articles import StatusArticle
 from app.models.articles import Article
 from app.models.brands import Brand
 from app.models.categories import Category
@@ -22,6 +23,14 @@ class ArticleRepository:
         )
         result = await self.db.exec(query)
         return result.first() 
+
+    async def get_zero_stock_items(self) -> list[Article]:
+        query = select(Article).where(
+            (Article.status == StatusArticle.AVAILABLE.value) & 
+            (Article.stock == 0)
+        )
+        result = await self.db.exec(query)
+        return result.all()
 
     async def title_exists(self, title: str) -> bool:
         query = select(Article.id).where(Article.title == title)
