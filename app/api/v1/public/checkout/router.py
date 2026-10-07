@@ -29,7 +29,7 @@ async def create(
     invoice_service = InvoiceService(db=db)
 
     try:
-        invoice = await invoice_service.Checkout(
+        invoice = await invoice_service.checkout(
             data=data,             
             user_id=user.id
         )

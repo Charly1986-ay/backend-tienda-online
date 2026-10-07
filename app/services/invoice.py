@@ -19,7 +19,7 @@ from app.repositories.movements import ActivityRepository
 
 from app.services.payment import PaymentService
 
-from app.core.exceptions import InvoiceNotFound
+from app.core.exceptions import CartException, InvoiceNotFound
 from app.core.pagination import get_pagination
 
 
@@ -47,7 +47,7 @@ class InvoiceService:
             await self.db.rollback()
             raise e
 
-    async def Checkout(
+    """ async def checkout(
         self, 
         data: InvoiceCreate,        
         user_id: int
@@ -94,7 +94,66 @@ class InvoiceService:
 
             await self.db.refresh(invoice_db)            
             
-            return invoice_db           
+            return invoice_db """     
+
+    async def checkout(
+        self, 
+        data: InvoiceCreate,        
+        user_id: int
+    )-> Invoice:
+        try:
+            if not data.items:
+                raise CartException();
+
+            invoice_db = Invoice(
+                total=data.total, 
+                client_id=data.client_id
+            )
+
+            # generamos el codigo de factura
+            invoice_db.invoice_number = InvoiceCreate.generate_code(
+                id=invoice_db.id
+            )
+
+            await self.invoice_repo.create_invoice(invoice_db)
+
+            # cargamos los items
+            await self.items_service.insert_items(
+                items=data.items,
+                invoice=invoice_db,
+                user_id=user_id
+            )
+            
+            # hacemos el pago    
+            await self.payment_service.create_payment(
+                card=data.card,
+                #user_id=user_id,
+                invoice=invoice_db
+            )
+            
+            # registramos actividad
+            log = GenericActivityLog(
+                user_id=user_id,
+                target_type=TargetType.INVOICE.value,
+                target_id=str(invoice_db.id),
+                movement_type=MovementType.CREATED.value,
+                details=(
+                    f'Se creó la factura {invoice_db.invoice_number} '
+                    f'x ${invoice_db.total} '
+                    f'al cliente NRO {invoice_db.client_id}'
+                )
+            )
+            await self.activity_repo.create_movement(log=log)
+            
+            await self.db.refresh(invoice_db)  
+
+            await self.db.commit()          
+                        
+            return invoice_db            
+        except Exception as e:
+            await self.db.rollback()
+            raise e
+
 
 
     async def change_status(

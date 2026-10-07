@@ -38,7 +38,10 @@ async def lifespan(app: FastAPI):
         coalesce=True     # Si se solapan, junta las ejecuciones pendientes en una
     )
     scheduler.start()
+
     yield
+    
+    scheduler.shutdown()
 
 app = FastAPI(    
     title=settings.PROJECT_NAME,

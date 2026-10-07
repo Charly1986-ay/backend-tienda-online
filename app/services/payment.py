@@ -28,28 +28,33 @@ class PaymentService:
         #user_id: int, 
         invoice: Invoice
     ) -> None:
-        data_dict = card.model_dump()  
-
-        payment_method_id = await self.stripe_service.create_payment_method(
-            card=data_dict
-        )  
-
-        payment_stripe = self.stripe_service.create_payment(
-            # client_id=user_id,               
-            amount=invoice.total,
-            currency=TypeCurrency.USD.value,
-            payment_method_id=payment_method_id,
-        )
-        
-        # manejo de exceptions
-        if payment_stripe is None or payment_stripe.id is None:
-            raise PaymentException()
-        
-        payment = Payment(
-            invoice_id=invoice.id,
-            amount=invoice.total,               
-            stripe_payment_intent_id=payment_stripe.id,
-            status=PaymentStatus.COMPLETED.value
-        )
-        
-        await self.payment_repo.create_payment(data=payment)
+        try:
+            data_dict = card.model_dump()  
+            
+            payment_method_id = await self.stripe_service.create_payment_method(
+                card=data_dict
+            )  
+            
+            payment_stripe = self.stripe_service.create_payment(
+                # client_id=user_id,               
+                amount=invoice.total,
+                currency=TypeCurrency.USD.value,
+                payment_method_id=payment_method_id,
+            )
+                    
+            # manejo de exceptions
+            if payment_stripe is None or payment_stripe.id is None:
+                raise PaymentException()
+                    
+            payment = Payment(
+                invoice_id=invoice.id,
+                amount=invoice.total,               
+                stripe_payment_intent_id=payment_stripe.id,
+                status=PaymentStatus.COMPLETED.value
+            )
+                    
+            payment_new = await self.payment_repo.create_payment(data=payment)
+            
+            return payment_new
+        except Exception as e:
+            raise e

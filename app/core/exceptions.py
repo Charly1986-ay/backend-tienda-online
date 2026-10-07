@@ -143,3 +143,12 @@ class PaymentException(HTTPException):
             status_code=status.HTTP_402_PAYMENT_REQUIRED, 
             detail=detail
     )
+
+
+class CartException(HTTPException):
+    """Excepción lanzada cuando el carrito de compras esta vacío."""
+    def __init__(self, detail: str = "El carrito de compras esta vació"):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT, 
+            detail=detail
+    )
