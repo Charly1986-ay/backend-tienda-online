@@ -1,0 +1,31 @@
+from decimal import Decimal
+from typing import List, Optional
+from pydantic import BaseModel, ConfigDict
+from app.api.v1.admin.articles.enums import UnitsType
+
+
+class ArticlePublicResponse(BaseModel):
+    id: int
+    title: str
+    slug: str
+    detail: Optional[str] = None
+    price: Decimal   
+    stock: int               
+    units_type: UnitsType   
+    image: Optional[str] = None
+    category_name: Optional[str] = None
+    brand_name: Optional[str] = None
+    
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Schema de paginación para la vista pública
+class ArticlePublicPagination(BaseModel):
+    counter: int
+    pages: int
+    offset: int
+    page: int
+    page_size: int
+    articles: List[ArticlePublicResponse]
+
+    model_config = ConfigDict(from_attributes=True)

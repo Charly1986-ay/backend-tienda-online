@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Optional
 from sqlmodel import Column, Field, SQLModel, String
 
-from app.enums.movements import MovementType
+from app.api.v1.admin.movements.enums import MovementType
 
 
 

@@ -138,7 +138,7 @@ async def seed_articles(db: AsyncSession) -> None:
                     category_id=category_id,
                     units_type=data.get('units_type'),
                     status=data.get('status'),
-                    image_url=data.get('image_url')
+                    image=data.get('image')
                 ))
             
 

@@ -8,7 +8,7 @@ from app.api.v1.admin.articles.schemas import ArticleResponse
 from app.api.v1.admin.brands.schemas import BrandCreate, BrandResponse
 from app.models.users import User
 
-from app.services.brand import BrandService
+from .services import BrandService
 
 from app.core.db import get_session
 from app.core.exceptions import BrandExistsException, BrandNotFound
@@ -60,7 +60,7 @@ async def update_brand(
 
 
 @router.get(
-    '/{brand_id}/categories', 
+    '/{brand_id}/brands', 
     response_model=list[ArticleResponse],
     status_code=status.HTTP_200_OK
 )

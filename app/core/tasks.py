@@ -1,5 +1,5 @@
 from .db import AsyncSessionLocal  
-from app.services import task
+from app.workers import task
 
 async def check_out_job():    
     async with AsyncSessionLocal() as db:

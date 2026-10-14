@@ -14,9 +14,11 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.core.config import settings
 from app.core.db import init_db
 
+
 from app.api.v1.admin import router as admin_router
-from app.api.v1.public import router as public_router
+from app.api.v1.store import router as store_router
 from app.api.v1.auth.router import router as auth_router
+from app.api.v1.users.router import router as user_router
 from app.core.tasks import check_out_job
 
 
@@ -94,8 +96,9 @@ app.add_middleware(
 )
 
 app.include_router(admin_router, prefix='/api/v1')
-app.include_router(public_router, prefix='/api/v1')
+app.include_router(store_router, prefix='/api/v1')
 app.include_router(auth_router, prefix='/api/v1/auth', tags=['Auth'])
+app.include_router(user_router, prefix='/api/v1/users', tags=['Users'])
 
 
 @app.get('/')

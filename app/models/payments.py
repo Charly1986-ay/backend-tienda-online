@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Column, Field, Numeric, Relationship, SQLModel
 
-from app.enums.payments import PaymentStatus, TypeCurrency
+from app.api.v1.store.payments.enums import PaymentStatus, TypeCurrency
 
 
 if TYPE_CHECKING:

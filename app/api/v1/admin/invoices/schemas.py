@@ -6,7 +6,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
-from app.enums.invoices import InvoiceStatus
+from .enums import InvoiceStatus
 
 
 class UpdateInvoiceStatus(BaseModel):

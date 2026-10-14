@@ -7,7 +7,7 @@ from app.api.v1.admin.articles.schemas import ArticleResponse
 from app.api.v1.admin.categories.schemas import CategoryCreate, CategoryResponse
 
 from app.models.users import User
-from app.services.category import CategoryService
+from .services import CategoryService
 
 from app.core.db import get_session
 
@@ -44,7 +44,7 @@ async def update_category(
 ) -> CategoryResponse:
     service = CategoryService(db=db)
     try:
-        return await service.update_category_category(
+        return await service.update_category(
             data=data, 
             category_id=category_id,
             user_id=current.id

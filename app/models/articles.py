@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import Optional
 from sqlmodel import Column, Field, Relationship, SQLModel, String
 
-from app.enums.articles import StatusArticle, UnitsType
+from app.api.v1.admin.articles.enums import StatusArticle, UnitsType
 from app.models.categories import Category
 from app.models.brands import Brand
 
@@ -22,7 +22,7 @@ class Article(SQLModel, table=True):
     category_id: int = Field(default=1, foreign_key='category.id', index=True) 
     units_type: str = Field(default=UnitsType.UNITS.value, sa_column=Column(String))
     status: str = Field(default=StatusArticle.AVAILABLE.value, sa_column=Column(String))
-    image_url: Optional[str] = Field(default=None)    
+    image: Optional[str] = Field(default=None)    
 
     # Relaciones para navegar fácilmente entre objetos en SQLAlchemy
     brand: Optional[Brand] = Relationship(

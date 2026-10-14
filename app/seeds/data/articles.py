@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from app.models.articles import UnitsType, StatusArticle
+from app.api.v1.admin.articles.enums import UnitsType, StatusArticle
 
 ARTICLES = [
     {
@@ -13,7 +13,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets, Notebooks y Accesorios
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Taladro Percutor DeWalt 13mm',
@@ -25,7 +25,7 @@ ARTICLES = [
         'category_id': 10,  # Herramientas Manuales, Eléctricas...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Smartphone Samsung Galaxy A54 128GB',
@@ -37,7 +37,7 @@ ARTICLES = [
         'category_id': 4,  # Teléfonos móviles
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Smart TV 50" 4K UHD JVC',
@@ -49,7 +49,7 @@ ARTICLES = [
         'category_id': 9,  # TVs, Televisores y plasmas
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Carpa Camping Iglú 4 Personas',
@@ -61,7 +61,7 @@ ARTICLES = [
         'category_id': 2,  # Camping, Gazebos y Aire libre
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Procesador AMD Ryzen 5 5600X',
@@ -73,7 +73,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Juego de Ollas de Acero Inoxidable 5 Pzs',
@@ -85,7 +85,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Bicicleta Mountain Bike Rodado 29',
@@ -97,7 +97,7 @@ ARTICLES = [
         'category_id': 7,  # Indumentaria, Bicicletas...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Monitor Gamer LG 24" Full HD 144Hz',
@@ -109,7 +109,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Escritorio para Oficina o PC Moderno',
@@ -121,7 +121,7 @@ ARTICLES = [
         'category_id': 8,  # Mobiliario y muebles para el hogar
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
 
     # --- 25 Nuevos Artículos añadidos ---
@@ -135,7 +135,7 @@ ARTICLES = [
         'category_id': 6,  # Artículos de baño y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Set de Toallas y Toallones 4 Pzs',
@@ -147,7 +147,7 @@ ARTICLES = [
         'category_id': 6,  # Artículos de baño y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Microondas Panasonic 20L',
@@ -159,7 +159,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Smart TV 55" 4K Samsung',
@@ -171,7 +171,7 @@ ARTICLES = [
         'category_id': 9,  # TVs, Televisores y plasmas
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Notebook HP Pavilion 14"',
@@ -183,7 +183,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Tablet Acer Iconia 10"',
@@ -195,7 +195,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Plancha a Vapor Panasonic',
@@ -207,7 +207,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Aspiradora Robot LG',
@@ -219,7 +219,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Placa de Video Gigabyte RTX 3060',
@@ -231,7 +231,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Procesador Intel Core i7 12700K',
@@ -243,7 +243,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Radio Portátil Noblex AM/FM',
@@ -255,7 +255,7 @@ ARTICLES = [
         'category_id': 9,  # TVs, Televisores y plasmas
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Barra de Sonido LG con Subwoofer',
@@ -267,7 +267,7 @@ ARTICLES = [
         'category_id': 9,  # TVs, Televisores y plasmas
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Linterna LED Recargable Caterpillar',
@@ -279,7 +279,7 @@ ARTICLES = [
         'category_id': 2,  # Camping, Gazebos y Aire libre
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Mochila Táctica Caterpillar 30L',
@@ -291,7 +291,7 @@ ARTICLES = [
         'category_id': 7,  # Indumentaria, Bicicletas...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Soldadora Inverter DeWalt 200A',
@@ -303,7 +303,7 @@ ARTICLES = [
         'category_id': 10,  # Herramientas Manuales...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Amoladora Angular DeWalt 4-1/2"',
@@ -315,7 +315,7 @@ ARTICLES = [
         'category_id': 10,  # Herramientas Manuales...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Colchón 2 Plazas Alta Densidad',
@@ -327,7 +327,7 @@ ARTICLES = [
         'category_id': 8,  # Mobiliario y muebles para el hogar
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Silla de Escritorio Ergonomica',
@@ -339,7 +339,7 @@ ARTICLES = [
         'category_id': 8,  # Mobiliario y muebles para el hogar
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Cafetera de Filtro Panasonic',
@@ -351,7 +351,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Parlante Bluetooth Noblex Resistente al Agua',
@@ -363,7 +363,7 @@ ARTICLES = [
         'category_id': 9,  # TVs, Televisores y plasmas
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Auriculares Gamer Lenovo Legion',
@@ -375,7 +375,7 @@ ARTICLES = [
         'category_id': 3,  # PCs, Tablets...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Remera Deportiva Secado Rápido',
@@ -387,7 +387,7 @@ ARTICLES = [
         'category_id': 7,  # Indumentaria, Bicicletas...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Pelota de Fútbol Profesional',
@@ -399,7 +399,7 @@ ARTICLES = [
         'category_id': 7,  # Indumentaria, Bicicletas...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Estufa Halógena de Pie Noblex',
@@ -411,7 +411,7 @@ ARTICLES = [
         'category_id': 5,  # Artículos de cocinas y deco
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
     {
         'title': 'Kit de Destornilladores de Precisión',
@@ -423,6 +423,6 @@ ARTICLES = [
         'category_id': 10,  # Herramientas Manuales...
         'units_type': UnitsType.UNITS.value,
         'status': StatusArticle.AVAILABLE.value,
-        'image_url': 'not-photo_512.png',
+        'image': 'not-photo_512.png',
     },
 ]

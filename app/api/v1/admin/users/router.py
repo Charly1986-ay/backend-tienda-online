@@ -7,9 +7,10 @@ from app.utils.permission import it_support_specialist, client_dependency
 
 from app.models.users import User
 
-from .schemas import UserCreate, UserResponse, UserUpdate, UserUpdateStatus
+from .schemas import AdminUserCreate, UserResponse
+from app.api.v1.users.schemas import UserUpdate, UserUpdateStatus
 
-from app.services.users import UserService
+from .services import AdminUserService
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -17,13 +18,17 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 router = APIRouter()
 
 
-@router.post('/register', response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    '/register', 
+    response_model=UserResponse, 
+    status_code=status.HTTP_201_CREATED
+)
 async def register(
-    user: UserCreate,
+    user: AdminUserCreate,
     current: User = it_support_specialist,
     db: AsyncSession = Depends(get_session)
 ) -> UserResponse:
-    service = UserService(db=db)
+    service = AdminUserService(db=db)
 
     try:
         return await service.register_account(user=user, admin=current)
@@ -35,7 +40,7 @@ async def register(
 
 
 @router.put(
-    '/update-account',
+    '/update',
     response_model=UserResponse, 
     status_code=status.HTTP_200_OK
 )
@@ -44,7 +49,7 @@ async def update_account(
     current: User = client_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> UserResponse:
-    service = UserService(db=db)
+    service = AdminUserService(db=db)
 
     try:
         return await service.update_user(
@@ -69,7 +74,7 @@ async def deactivate(
     current: User = it_support_specialist,
     db: AsyncSession = Depends(get_session)
 ) -> UserResponse:
-    service = UserService(db=db)
+    service = AdminUserService(db=db)
 
     try:
         return await service.deactivate_account(

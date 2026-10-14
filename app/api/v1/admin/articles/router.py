@@ -1,16 +1,19 @@
-from typing import Annotated, Any, Literal, Optional
+from decimal import Decimal
+from typing import Any, Literal, Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException 
-from fastapi import Path, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form
+from fastapi import HTTPException, UploadFile 
+from fastapi import Path, Query, status
 
-from pydantic import ValidationError
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.enums.articles import ArticleSortField, StatusArticle
+from .enums import ArticleSortField, StatusArticle, UnitsType
 from .schemas import ArticleCreate, ArticlePaginationResponse
 from .schemas import UpdateBrand, UpdateCategory, UpdatePrice
 from .schemas import ArticleResponse, ArticleUpdate, UpdateStatus
-from app.services.article import ArticleService
+
+from .services import ArticleService
+from .services_query import ArticleQueryService
 
 from app.models.users import User
 from app.core.db import get_session
@@ -49,7 +52,7 @@ async def get_all(
     user: User = support_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ArticlePaginationResponse:
-    article_service = ArticleService(db=db)
+    article_service = ArticleQueryService(db=db)
 
     pagination = await article_service.get_all_pagination(
         page_size=page_size,
@@ -78,7 +81,7 @@ async def get_article_by_id(
     ),  
     db: AsyncSession = Depends(get_session)
 ) -> ArticleResponse:
-    article_service = ArticleService(db=db)
+    article_service = ArticleQueryService(db=db)
 
     try:
         return await article_service.get_article_by_id(
@@ -101,11 +104,31 @@ async def get_article_by_id(
     }
 )
 async def insert_article(
-    data: Annotated[ArticleCreate, Depends(ArticleCreate.as_form)],    
+    title: str = Form(...),
+    detail: str | None = Form(None),
+    stock: int = Form(0),
+    cost: Decimal = Form(Decimal("0.00")),
+    price: Decimal = Form(Decimal("0.00")),
+    brand_id: int = Form(1),
+    category_id: int = Form(1),
+    units_type: UnitsType = Form(UnitsType.UNITS),        
+    image: Optional[UploadFile] = File(None),    
     user: User = support_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ArticleResponse:
     article_service = ArticleService(db=db)
+
+    data = ArticleCreate(
+        title=title,
+        detail=detail,
+        stock=stock,
+        cost=cost,
+        price=price,
+        brand_id=brand_id,
+        category_id=category_id,
+        units_type=units_type,
+        image=get_image_filename(image=image)
+    )
     
     return await article_service.create_article(
         article=data,
@@ -119,7 +142,10 @@ async def insert_article(
     status_code=status.HTTP_200_OK
 )
 async def update_article(    
-    data: ArticleUpdate = Depends(ArticleUpdate.as_form),    
+    title: str = Form(...),
+    detail: str | None = Form(None),    
+    units_type: UnitsType = Form(UnitsType.UNITS),        
+    image: Optional[UploadFile] = File(None), 
     article_id: int = Path(
         ..., 
         ge=1,
@@ -128,6 +154,12 @@ async def update_article(
     user: User = support_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ArticleResponse:
+    data = ArticleUpdate(
+        title=title,
+        detail=detail,        
+        units_type=units_type,
+        image=get_image_filename(image=image)
+    )
     return await _process_article_update(db, user.id, article_id, data, 'update')
 
 
@@ -200,3 +232,10 @@ async def _process_article_update(
             status_code=status.HTTP_404_NOT_FOUND,
             detail='Articulo no encontrado'
         )
+
+
+def get_image_filename(image: UploadFile | None):
+    if image and image.filename:
+        saved = save_uploaded_image(image)
+        return saved['filename']   
+    return None

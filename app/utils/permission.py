@@ -1,14 +1,28 @@
+from __future__ import annotations
+
 from fastapi import Depends
+
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.core.db import get_session
+
+from app.models.users import User
+from app.api.v1.users.enums import UserStatus, Role
+from app.api.v1.users.repository import UserRepository
+
 from app.core.security import oauth2_schema, decode_token
-from app.core.exceptions import CredentialsException, UserInactiveException, ForbiddenException
-from app.models.users import User, UserStatus, Role
-from app.repositories.users import UserRepository
+
+from app.core.exceptions import CredentialsException
+from app.core.exceptions import UserInactiveException
+from app.core.exceptions import  ForbiddenException
+
+async def get_db_session_dependency():
+    from app.core.db import get_session
+
+    async for session in get_session():
+        yield session
 
 async def get_current_user(
     token: str = Depends(oauth2_schema),
-    db: AsyncSession = Depends(get_session)
+    db: AsyncSession = Depends(get_db_session_dependency),  
 ) -> User:
     try:
         payload = decode_token(token)
@@ -20,10 +34,10 @@ async def get_current_user(
 
     user_repo = UserRepository(db)
     user = await user_repo.get_by_email(email=email)
-    
+
     if not user:
         raise CredentialsException()
-        
+
     return user
 
 

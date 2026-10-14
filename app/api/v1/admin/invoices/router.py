@@ -3,17 +3,17 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, Path 
 from fastapi import Query, status
 
-from app.api.v1.public.invoice_items.schemas import ItemPublic
-from app.services.invoice_items import ItemsService
+from app.api.v1.store.items.schemas import ItemPublic
+from app.api.v1.admin.items.services import ItemsService
  
 from app.core.exceptions import InvoiceNotFound
 
+from .enums import InvoiceSortField, InvoiceStatus
 
-from app.enums.invoices import InvoiceSortField, InvoiceStatus
 from .schemas import InvoicePaginationResponse
 from .schemas import InvoiceResponse
-from app.services.invoice import InvoiceService
 
+from .services_query import InvoiceQueryService
 from app.core.db import get_session
 
 from typing import Literal, Optional
@@ -42,7 +42,7 @@ async def get_all(
     ),
     db: AsyncSession = Depends(get_session)
 ) -> InvoicePaginationResponse:
-    invoice_service = InvoiceService(db=db)
+    invoice_service = InvoiceQueryService(db=db)
 
     pagination = await invoice_service.get_all_pagination(
         page_size=page_size,
@@ -70,7 +70,7 @@ async def get_invoice(
     ),
     db: AsyncSession = Depends(get_session)
 ) -> InvoiceResponse:
-    invoice_service = InvoiceService(db=db)
+    invoice_service = InvoiceQueryService(db=db)
 
     try:       
         return await invoice_service.get_invoice(invoice_id=invoice_id)

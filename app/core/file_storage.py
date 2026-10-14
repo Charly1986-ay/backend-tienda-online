@@ -5,7 +5,7 @@ from fastapi import UploadFile, HTTPException, status
 
 
 MEDIA_DIR = 'app/uploads'
-ALLOW_MIME = ['image/png', 'image/jpeg', 'image/webp']
+ALLOW_MIME = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp']
 MAX_MB = int(os.getenv('MAX_UPLOAD_MB', '3'))
 CHUNKS = 1024 * 1024
 
@@ -15,6 +15,10 @@ def ensure_media_dir() -> None:
 
 
 def save_uploaded_image(file: UploadFile) -> dict:
+    print("=== SAVE IMAGE ===")
+    print("filename:", file.filename)
+    print("content_type:", file.content_type)
+
     if file.content_type not in ALLOW_MIME:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -22,6 +26,10 @@ def save_uploaded_image(file: UploadFile) -> dict:
         )
 
     ensure_media_dir()
+
+    # Reiniciamos el puntero de forma síncrona en el archivo subyacente
+    file.file.seek(0)
+
     ext = os.path.splitext(file.filename)[1]  # .png, .jpeg
     filename = f'{uuid.uuid4().hex}{ext}'
     file_path = os.path.join(MEDIA_DIR, filename)

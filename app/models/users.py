@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING, List, Optional
 from sqlmodel import Column, Field, Relationship, SQLModel, String
 
-from app.enums.users import Role, UserStatus
+from app.api.v1.users.enums import Role, UserStatus
 
 if TYPE_CHECKING:    
     from app.models.invoice import Invoice
