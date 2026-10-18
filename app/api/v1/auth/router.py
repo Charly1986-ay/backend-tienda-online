@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .schemas import UserCreate, UserLogin
-from .schemas import TokenResponse, UserPublic
+from app.models.users import User
+
+from app.api.v1.users.schemas import UserCreate, UserResponse
+from .schemas import AuthResponse, UserLogin
 
 from .services import AuthService
 
@@ -11,51 +13,61 @@ from app.core.exceptions import UserExistsException
 from app.core.exceptions import UserNotFound
 
 from app.core.db import get_session
+
 from app.utils.permission import get_current_user_active
 
 
 router = APIRouter()
 
 
-@router.get('/me', response_model=UserPublic)
-async def get_profile(
-    user = Depends(get_current_user_active)
-) -> UserPublic:
-    return user
+# Renovación automática de Token, si el mismo no expiro y es válido
+@router.get('/check-status')
+def check_token_status(
+    current_user: User = Depends(get_current_user_active),
+    db: AsyncSession = Depends(get_session)
+) -> AuthResponse:
+    auth_service = AuthService(db=db)
+    return {
+        'user': current_user,
+        'token': auth_service.check_status(
+            current_user.email
+        )
+    }
 
 
 @router.post(
-    '/login', 
-    response_model=TokenResponse, 
-    status_code=status.HTTP_200_OK
+    '/login',
+    status_code=status.HTTP_200_OK,
+    response_model=AuthResponse
 )
 async def login(
     login_data: UserLogin,
     db: AsyncSession = Depends(get_session)
-) -> TokenResponse:
-    try:                
+) -> AuthResponse:
+    try:        
         auth_service = AuthService(db=db)
-        token = await auth_service.authentication(login=login_data)
-        
-        return TokenResponse(
-            access_token=token
+        user_dict = await auth_service.authentication(
+            login=login_data
         )
+        return user_dict
+
     except (UserNotFound, CredentialsException):        
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Credenciales no válidas'
+            detail='Credenciales no válidas',
+            headers={"WWW-Authenticate": "Bearer"}, # Recomendado para APIs basadas en tokens
         )
 
 
 @router.post(
     '/register', 
-    response_model=UserPublic, 
+    response_model=UserResponse, 
     status_code=status.HTTP_201_CREATED
 )
 async def register_account(
     user: UserCreate,    
     db: AsyncSession = Depends(get_session)
-) -> UserPublic:
+) -> UserResponse:
     service = AuthService(db=db)
 
     try:

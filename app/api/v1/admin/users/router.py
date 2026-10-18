@@ -7,7 +7,9 @@ from app.utils.permission import it_support_specialist, client_dependency
 
 from app.models.users import User
 
-from .schemas import AdminUserCreate, UserResponse
+from .schemas import AdminUserCreate
+
+from app.api.v1.users.schemas import UserResponse
 from app.api.v1.users.schemas import UserUpdate, UserUpdateStatus
 
 from .services import AdminUserService

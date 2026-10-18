@@ -79,6 +79,7 @@ async def get_article_by_id(
         description='Identificador entero del artículo, debe ser mayor o igual a 1',
         examples=[1]
     ),  
+    user: User = support_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ArticleResponse:
     article_service = ArticleQueryService(db=db)

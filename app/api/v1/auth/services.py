@@ -2,7 +2,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.users import User
 
-from .schemas import UserCreate, UserLogin
+from .schemas import UserLogin
+from app.api.v1.users.schemas import UserCreate
 
 from app.api.v1.users.repository import UserRepository
 
@@ -29,9 +30,12 @@ class AuthService:
             raise CredentialsException()
 
         access_token = create_access_token(
-            data={"sub": user_db.email, "role": user_db.role}
+            data={"sub": user_db.email}
         )
-        return access_token
+        return {
+            'user': user_db,
+            'token': access_token            
+        }
 
 
     async def register_account(self, user: UserCreate):
@@ -59,3 +63,7 @@ class AuthService:
         except Exception as e:           
             await self.db.rollback()
             raise e    
+
+
+    def check_status(self, email) -> str:
+        return create_access_token(data={"sub": email})

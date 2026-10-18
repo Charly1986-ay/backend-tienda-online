@@ -8,6 +8,10 @@ from app.api.v1.admin.items.services import ItemsService
  
 from app.core.exceptions import InvoiceNotFound
 
+from app.models.users import User
+
+from app.utils.permission import manager_assistant_dependency
+
 from .enums import InvoiceSortField, InvoiceStatus
 
 from .schemas import InvoicePaginationResponse
@@ -40,6 +44,7 @@ async def get_all(
         default='asc', 
         description='Dirección del ordenamiento: asc o desc'
     ),
+    user: User = manager_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> InvoicePaginationResponse:
     invoice_service = InvoiceQueryService(db=db)
@@ -68,6 +73,7 @@ async def get_invoice(
         description='Identificador entero de la factura, debe ser mayor o igual a 1',
         examples=[1]
     ),
+    user: User = manager_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> InvoiceResponse:
     invoice_service = InvoiceQueryService(db=db)
@@ -93,6 +99,7 @@ async def get_items(
         description='Identificador entero de la factura, debe ser mayor o igual a 1',
         examples=[1]
     ),
+    user: User = manager_assistant_dependency,
     db: AsyncSession = Depends(get_session)
 ) -> ItemPublic:
     invoice_service = ItemsService(db=db)

@@ -8,7 +8,7 @@ from app.models.users import User
 from app.utils.permission import client_dependency
 
 from .schemas import UserUpdate, UserUpdateStatus
-from app.api.v1.auth.schemas import UserPublic
+from app.api.v1.users.schemas import UserResponse
 
 from .services import UserService
 
@@ -19,14 +19,14 @@ router = APIRouter()
 
 @router.put(
     '/update-account',
-    response_model=UserPublic, 
+    response_model=UserResponse, 
     status_code=status.HTTP_200_OK
 )
 async def update_account(    
     user: UserUpdate,    
     current: User = client_dependency,
     db: AsyncSession = Depends(get_session)
-) -> UserPublic:
+) -> UserResponse:
     service = UserService(db=db)
 
     try:
@@ -43,14 +43,14 @@ async def update_account(
 
 @router.patch(
     '/deactivate-account', 
-    response_model=UserPublic, 
+    response_model=UserResponse, 
     status_code=status.HTTP_200_OK
 )
 async def deactivate(   
     user: UserUpdateStatus,    
     current: User = client_dependency,
     db: AsyncSession = Depends(get_session)
-) -> UserPublic:
+) -> UserResponse:
     service = UserService(db=db)
 
     try:
