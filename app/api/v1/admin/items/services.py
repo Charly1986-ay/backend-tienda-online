@@ -18,7 +18,7 @@ from app.core.exceptions import ArticleNotFound
 from .repository import ItemRepository
 
 if TYPE_CHECKING:            
-    from app.api.v1.store.items.schemas import ItemCreate
+    from app.api.v1.shop.items.schemas import ItemCreate
 
 class ItemsService:    
     def __init__(self, db: AsyncSession):

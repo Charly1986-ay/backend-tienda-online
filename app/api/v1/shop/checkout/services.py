@@ -5,12 +5,12 @@ from app.models.invoice import Invoice
 from app.api.v1.admin.movements.enums import MovementType
 from app.api.v1.admin.movements.enums import TargetType
 
-from app.api.v1.store.checkout.schemas import InvoiceCreate
+from app.api.v1.shop.checkout.schemas import InvoiceCreate
 
 from .repository import InvoiceRepository
 
-from app.api.v1.store.items.services import ItemsService
-from app.api.v1.store.payments.services import PaymentService
+from app.api.v1.shop.items.services import ItemsService
+from app.api.v1.shop.payments.services import PaymentService
 from app.api.v1.admin.movements.services import ActivityLogService
 
 from app.core.exceptions import CartException    

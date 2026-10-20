@@ -17,7 +17,7 @@ from app.core.exceptions import PaymentException
 
 
 if TYPE_CHECKING:
-    from app.api.v1.store.payments.schemas import CardStripe
+    from app.api.v1.shop.payments.schemas import CardStripe
 
 
 class PaymentService:

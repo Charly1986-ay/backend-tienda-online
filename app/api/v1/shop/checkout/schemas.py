@@ -4,9 +4,9 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, computed_field
 
-from app.api.v1.store.items.schemas import ItemCreate 
-from app.api.v1.store.items.schemas import ItemPublic
-from app.api.v1.store.payments.schemas import CardStripe
+from app.api.v1.shop.items.schemas import ItemCreate 
+from app.api.v1.shop.items.schemas import ItemPublic
+from app.api.v1.shop.payments.schemas import CardStripe
 from app.api.v1.admin.invoices.enums import InvoiceStatus
 
 

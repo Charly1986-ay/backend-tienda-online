@@ -3,7 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, Path 
 from fastapi import Query, status
 
-from app.api.v1.store.items.schemas import ItemPublic
+from app.api.v1.shop.items.schemas import ItemPublic
 from app.api.v1.admin.items.services import ItemsService
  
 from app.core.exceptions import InvoiceNotFound

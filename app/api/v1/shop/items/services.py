@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.api.v1.store.articles.repository import ArticleRepository
+from app.api.v1.shop.articles.repository import ArticleRepository
 from app.api.v1.admin.articles.schemas import UpdateStock
 from app.models.items import InvoiceItem
 
@@ -20,7 +20,7 @@ from .repository import ItemRepository
 
 if TYPE_CHECKING:
     from app.models.invoice import Invoice          
-    from app.api.v1.store.items.schemas import ItemCreate
+    from app.api.v1.shop.items.schemas import ItemCreate
 
 class ItemsService:    
     def __init__(self, db: AsyncSession):
